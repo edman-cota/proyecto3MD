@@ -1,0 +1,78 @@
+---
+title: "Proyecto 3, avance 1"
+author:
+- "Micaela Yataz (carnet: 18960)"
+- " (carnet: )"
+- " (carnet: )"
+date: "2025-03-22"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(dplyr)
+library(ggplot2)
+library(GGally)
+
+library(readxl)
+```
+
+```{r cargando archivo, echo=FALSE}
+data <- read.csv("datos.csv")
+data <- data[complete.cases(data),]
+
+```
+
+
+#Descripción General del conjunto de datos.
+```{r}
+
+summary(data)
+```
+
+ 
+##Significado y tipo de cada una de las variables
+
+```{r descripcion de variables}
+
+variables <- c("Anio" ,"departamento", "externas", "transito", "violencia", "homicidios", "peso ", " diarrea", "mortalidad", "diabetes ", "circulatorio", "respiratorio")
+
+descripcion<-c("Año" ,"Departamento", "Tasa de mortalidad por causas externas por 100,000 habitantes", "Número de fallecidos en accidentes de tránsito", "Número de denuncias de violencia intrafamiliar", "Número de homicidios por departamento", "Porcentaje de niños con bajo peso al nacer ", " Tasa de mortalidad por diarrea (A09) por cada 100,000 habitantes", "Tasa bruta de mortalidad por cada 1,000 habitantes", "Tasa de mortalidad por diabetes mellitus (E10-E14) por cada 100,000 habitantes ", "Tasa de mortalidad por enfermedades del sistema circulatorio (I00-I99) por 100,000 habitantes", "Tasa de mortalidad por enfermedades del sistema respiratorio (J00-J99) por cada 10,000 habitantes")
+
+
+tabla1 <- data.frame(descripcion, row.names = variables)
+print(tabla1)
+```
+
+
+```{r tipo de variables}
+
+
+
+variables <- c("Anio" ,"departamento", "externas", "transito", "violencia", "homicidios", "peso ", " diarrea", "mortalidad", "diabetes ", "circulatorio", "respiratorio")
+tipo <- c("Cualitativa nominal" ,"Cualitativa nominal", "Cuantitativa discreta", "Cuantitativa discreta", "Cuantitativa discreta", "Cuantitativa discreta", "Cuantitativa continua ", " Cuantitativa continua", "Cuantitativa continua", "Cuantitativa continua ", "Cuantitativa continua", "Cuantitativa continua")
+
+tabla0 <- data.frame(tipo, row.names = variables)
+print(tabla0)
+
+```
+
+##Cantidad de variables
+```{r}
+length(variables)
+num_variables <-length(variables)
+print(paste("El número de variables en la tabla es:", num_variables))
+```
+
+##Cantidad de observaciones
+```{r}
+numero_filas <- nrow(data)
+print(paste("El número de observaciones es:", numero_filas))
+```
+#Exploración de variables numéricas
+
+#Medidas de tendencia central, distribución y orden.
+##Exploración de variables categóricas
+#Tablas de frecuencia
+#Relaciones entre las variables. 
+
