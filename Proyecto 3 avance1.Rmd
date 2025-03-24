@@ -17,8 +17,6 @@ library(tidyr)
 library(ggplot2)
 library(readxl)
 
-library(GGally)
-
 ```
 
 ```{r cargando archivo, echo=FALSE}
@@ -77,12 +75,14 @@ print(paste("El número de observaciones es:", numero_filas))
 # Exploración de variables numéricas
 
 ## Resumen estadístico de variables númericas
+
 ```{r}
 numeric_vars <- data %>% select_if(is.numeric)
 summary(numeric_vars)
 ```
 
-## Medidas de tendencia central 
+## Medidas de tendencia central
+
 ```{r}
 get_mode <- function(x) {
   unique_x <- unique(x)
@@ -102,6 +102,7 @@ print(medidas_tendencia)
 ## Distribución de variables numéricas
 
 ### 1. Histogramas para ver la distribución de cada variable numérica
+
 ```{r}
 numeric_vars %>%
   pivot_longer(cols = everything(), names_to = "Variable", values_to = "Valor") %>%
@@ -112,7 +113,8 @@ numeric_vars %>%
   labs(title = "Distribución de Variables Numéricas", x = "Valor", y = "Frecuencia")
 ```
 
-### 2. Boxplots para identificar valores atípicos 
+### 2. Boxplots para identificar valores atípicos
+
 ```{r}
 numeric_vars %>%
   pivot_longer(cols = everything(), names_to = "Variable", values_to = "Valor") %>%
@@ -123,6 +125,6 @@ numeric_vars %>%
   labs(title = "Boxplot de variables numéricas", x = "Variable", y = "Valor")
 ```
 
-##Exploración de variables categóricas 
+##Exploración de variables categóricas
 
 #Tablas de frecuencia #Relaciones entre las variables.
