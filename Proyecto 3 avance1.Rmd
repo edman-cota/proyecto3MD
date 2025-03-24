@@ -1,11 +1,13 @@
 ---
 title: "Proyecto 3, avance 1"
 author:
-- "Micaela Yataz (carnet: 18960)"
-- "Edman Cota (carnet: 19830)"
-- " (carnet: )"
+- 'Micaela Yataz (carnet: 18960)'
+- 'Edman Cota (carnet: 19830)'
+- 'Edwin de Leon (carnet: 22809)'
 date: "2025-03-22"
-output: html_document
+output:
+  html_document: default
+  pdf_document: default
 ---
 
 <https://github.com/edman-cota/proyecto3MD.git>
@@ -16,6 +18,8 @@ library(dplyr)
 library(tidyr)
 library(ggplot2)
 library(readxl)
+library(corrplot)
+
 
 ```
 
@@ -157,3 +161,43 @@ for (var in categorical_vars) {
 ```
 
 #Tablas de frecuencia #Relaciones entre las variables.
+
+# Relaciones entre variables
+
+## 1. Análisis de correlación entre variables numéricas
+
+# Seleccionamos las variables numéricas
+```{r}
+numeric_vars <- data %>% select_if(is.numeric)
+```
+
+# Calculamos la matriz de correlación
+```{r}
+cor_matrix <- cor(numeric_vars, use = "complete.obs")
+print("Matriz de correlación:")
+print(cor_matrix)
+```
+
+# Visualizamos la matriz de correlación con la librería corrplot
+```{r}
+if (!require(corrplot)) {
+  install.packages("corrplot")
+  library(corrplot)
+}
+corrplot(cor_matrix, method = "color", type = "upper", tl.cex = 0.8, 
+         title = "Matriz de Correlación de Variables Numéricas", mar=c(0,0,1,0))
+```
+## 2. Gráficos de dispersión (scatter plots) para analizar relaciones bivariadas
+# Aquí se genera un gráfico de dispersión para cada par de variables numéricas
+```{r}
+pairs(numeric_vars, main = "Matriz de Dispersión de Variables Numéricas", pch = 19, col = "steelblue")
+```
+## 3. Relación entre variables numéricas y la variable categórica "departamento"
+# Ejemplo: Boxplot de una variable numérica (por ejemplo, homicidios) según departamento
+```{r}
+ggplot(data, aes(x = departamento, y = homicidios)) +
+  geom_boxplot(fill = "tomato", color = "black", alpha = 0.7) +
+  theme_minimal() +
+  labs(title = "Distribución de homicidios por departamento", x = "Departamento", y = "Número de homicidios") +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+```
