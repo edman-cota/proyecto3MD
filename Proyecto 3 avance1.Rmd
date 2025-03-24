@@ -2,21 +2,23 @@
 title: "Proyecto 3, avance 1"
 author:
 - "Micaela Yataz (carnet: 18960)"
-- " (carnet: )"
+- "Edman Cota (carnet: 19830)"
 - " (carnet: )"
 date: "2025-03-22"
 output: html_document
 ---
 
-https://github.com/edman-cota/proyecto3MD.git
+<https://github.com/edman-cota/proyecto3MD.git>
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 library(dplyr)
+library(tidyr)
 library(ggplot2)
+library(readxl)
+
 library(GGally)
 
-library(readxl)
 ```
 
 ```{r cargando archivo, echo=FALSE}
@@ -25,15 +27,14 @@ data <- data[complete.cases(data),]
 
 ```
 
-
 #Descripción General del conjunto de datos.
+
 ```{r}
 
 summary(data)
 ```
 
- 
-##Significado y tipo de cada una de las variables
+## Significado y tipo de cada una de las variables
 
 ```{r descripcion de variables}
 
@@ -45,7 +46,6 @@ descripcion<-c("Año" ,"Departamento", "Tasa de mortalidad por causas externas p
 tabla1 <- data.frame(descripcion, row.names = variables)
 print(tabla1)
 ```
-
 
 ```{r tipo de variables}
 
@@ -60,21 +60,69 @@ print(tabla0)
 ```
 
 ##Cantidad de variables
+
 ```{r}
 length(variables)
 num_variables <-length(variables)
 print(paste("El número de variables en la tabla es:", num_variables))
 ```
 
-##Cantidad de observaciones
+## Cantidad de observaciones
+
 ```{r}
 numero_filas <- nrow(data)
 print(paste("El número de observaciones es:", numero_filas))
 ```
-#Exploración de variables numéricas
 
-#Medidas de tendencia central, distribución y orden.
-##Exploración de variables categóricas
-#Tablas de frecuencia
-#Relaciones entre las variables. 
+# Exploración de variables numéricas
 
+## Resumen estadístico de variables númericas
+```{r}
+numeric_vars <- data %>% select_if(is.numeric)
+summary(numeric_vars)
+```
+
+## Medidas de tendencia central 
+```{r}
+get_mode <- function(x) {
+  unique_x <- unique(x)
+  unique_x[which.max(tabulate(match(x, unique_x)))]
+}
+
+medidas_tendencia <- data.frame(
+  Variable = names(numeric_vars),
+  Media = sapply(numeric_vars, mean, na.rm = TRUE),
+  Mediana = sapply(numeric_vars, median, na.rm = TRUE),
+  Moda = sapply(numeric_vars, get_mode)
+)
+
+print(medidas_tendencia)
+```
+
+## Distribución de variables numéricas
+
+### 1. Histogramas para ver la distribución de cada variable numérica
+```{r}
+numeric_vars %>%
+  pivot_longer(cols = everything(), names_to = "Variable", values_to = "Valor") %>%
+  ggplot(aes(x = Valor)) +
+  geom_histogram(bins = 30, fill = "steelblue", color = "black", alpha = 0.7) +
+  facet_wrap(~ Variable, scales = "free") +
+  theme_minimal() +
+  labs(title = "Distribución de Variables Numéricas", x = "Valor", y = "Frecuencia")
+```
+
+### 2. Boxplots para identificar valores atípicos 
+```{r}
+numeric_vars %>%
+  pivot_longer(cols = everything(), names_to = "Variable", values_to = "Valor") %>%
+  ggplot(aes(x = Variable, y = Valor)) +
+  geom_boxplot(fill = "tomato", color = "black", alpha = 0.7) +
+  coord_flip() +
+  theme_minimal() +
+  labs(title = "Boxplot de variables numéricas", x = "Variable", y = "Valor")
+```
+
+##Exploración de variables categóricas 
+
+#Tablas de frecuencia #Relaciones entre las variables.
