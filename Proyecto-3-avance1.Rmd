@@ -95,7 +95,13 @@ Se presenta una vision general de las variables numericas del conjunto de datos 
 numeric_vars <- data %>% select(where(is.numeric))
 summary(numeric_vars)
 ```
-
+ Mesreg, Mesocu y Diaocu, son los meses, dias de difuncion, en el cual se puede hacer analisis y ver si hay una temporada con mas indices de defunciones y realcionalo por eventos especificos. 
+ AñoregÑ muestra que la mayoria de difuncioes se realizaron en el año 2022, lo cual puede ser por inclusion de registros recientes o por la pandemia.        
+Sexo: registrada como 1 y 2 con media de 1.45 con el 1 lo cual indica mayor defunciones por este genero, lo cual se puede analizar para diferencia en mortalidad entre generos.
+  Edadif: el rango va desde 0 a 999, donde el menor es 0, que indica muerte infantil, lo cual es conciderable para analisis de mortalidad infantil, la mediana es de 64 años, por lo que hay mayor difunciones en edades mayores 
+  
+  
+  
 ## **Medidas de Tendencia Central**
 ```{r}
 get_mode <- function(x) {
@@ -113,29 +119,111 @@ medidas_tendencia <- data.frame(
 
 print(medidas_tendencia)
 ```
+La variable de año de difuncion presenta una mediana de 2022 y una moda de 2022 lo cual indica que la mayoria de registro de difuncion se relaizaron el en el 2022.
+
+En cuanto a la variable de edad, tiene una media de 60.44 y mediana de 64, en la cual hay una diferencia que sugiere una distribucion sesgada a la derecha, por tanto hay valores atipcos altos . La moda de 1 podria indicar la taza alta en mortalidad infantil 
+
+La variable como sexo, tiene como media 1.45 y mediana 1, la cual indicaria que las defunciones registradas con en gran parte del genero que  representa el genero 1.
+
+
+
+
 
 ## **Distribución de Variables Numéricas**
 ### Histogramas
+
+
 ```{r}
-numeric_vars %>%
-  pivot_longer(cols = everything(), names_to = "Variable", values_to = "Valor") %>%
-  ggplot(aes(x = Valor)) +
-  geom_histogram(binwidth = 10, fill = "steelblue", color = "black", alpha = 0.7) +
-  facet_wrap(~ Variable, scales = "free") +
-  theme_minimal() +
-  labs(title = "Distribución de Variables Numéricas", x = "Valor", y = "Frecuencia")
+# Establecer la disposición de los gráficos (para mostrar varios a la vez)
+
+par(mfrow = c(4, 4), mar = c(2, 2, 2, 2)) # Márgenes más pequeños
+
+# Crear histogramas para cada variable numérica
+hist(data$Depreg, main = "Depreg", xlab = "Valor")
+hist(data$Mupreg, main = "Mupreg", xlab = "Valor")
+hist(data$Mesreg, main = "Mesreg", xlab = "Valor")
+hist(data$Añoreg, main = "Añoreg", xlab = "Valor")
+hist(data$Depocu, main = "Depocu", xlab = "Valor")
+hist(data$Mupocu, main = "Mupocu", xlab = "Valor")
+hist(data$Diaocu, main = "Diaocu", xlab = "Valor")
+hist(data$Mesocu, main = "Mesocu", xlab = "Valor")
+hist(data$Añoocu, main = "Añoocu", xlab = "Valor")
+hist(data$Edadif, main = "Edadif", xlab = "Valor")
+hist(data$Perdif, main = "Perdif", xlab = "Valor")
+hist(data$Puedif, main = "Puedif", xlab = "Valor")
+hist(data$Ecidif, main = "Ecidif", xlab = "Valor")
+hist(data$Escodif, main = "Escodif", xlab = "Valor")
+hist(data$Ciuodif, main = "Ciuodif", xlab = "Valor")
+hist(data$Pnadif, main = "Pnadif", xlab = "Valor")
+hist(data$Dnadif, main = "Dnadif", xlab = "Valor")
+hist(data$Mnadif, main = "Mnadif", xlab = "Valor")
+hist(data$Nacdif, main = "Nacdif", xlab = "Valor")
+hist(data$Predif, main = "Predif", xlab = "Valor")
+hist(data$Dredif, main = "Dredif", xlab = "Valor")
+hist(data$Mredif, main = "Mredif", xlab = "Valor")
+hist(data$Asist, main = "Asist", xlab = "Valor")
+hist(data$Ocur, main = "Ocur", xlab = "Valor")
+hist(data$Cerdef, main = "Cerdef", xlab = "Valor")
+
+# Restablecer la disposición de los gráficos
+par(mfrow = c(1, 1))
 ```
+Las variables Mesreg, Diaocu, Mesocu muetran una distribucion de relativamente uniforme.
+Edadif, hay asimetria a la derecha, lo cual puede indicar el que hay mas muertes en personas de edades avanzadas 
+Pnadif, Puedif, muestran valores atipicos.
+Depreg, Depocu, la distribucion es desigual, por lo que hay departamentos con mas indices de ocurrencia mas alta.
+
+
 
 ### Boxplots
+
+
 ```{r}
-numeric_vars %>%
-  pivot_longer(cols = everything(), names_to = "Variable", values_to = "Valor") %>%
-  ggplot(aes(x = Variable, y = Valor)) +
-  geom_boxplot(fill = "tomato", color = "black", alpha = 0.7) +
-  coord_flip() +
-  theme_minimal() + 
-  labs(title = "Boxplot de Variables Numéricas", x = "Variable", y = "Valor")
+# Establecer la disposición de los gráficos (para mostrar varios a la vez)
+par(mfrow = c(4, 4), mar = c(2, 2, 2, 2)) # Márgenes más pequeños
+
+# Crear boxplots para cada variable numérica
+boxplot(data$Depreg, main = "Depreg", ylab = "Valor")
+boxplot(data$Mupreg, main = "Mupreg", ylab = "Valor")
+boxplot(data$Mesreg, main = "Mesreg", ylab = "Valor")
+boxplot(data$Añoreg, main = "Añoreg", ylab = "Valor")
+boxplot(data$Depocu, main = "Depocu", ylab = "Valor")
+boxplot(data$Mupocu, main = "Mupocu", ylab = "Valor")
+boxplot(data$Diaocu, main = "Diaocu", ylab = "Valor")
+boxplot(data$Mesocu, main = "Mesocu", ylab = "Valor")
+boxplot(data$Añoocu, main = "Añoocu", ylab = "Valor")
+boxplot(data$Edadif, main = "Edadif", ylab = "Valor")
+boxplot(data$Perdif, main = "Perdif", ylab = "Valor")
+boxplot(data$Puedif, main = "Puedif", ylab = "Valor")
+boxplot(data$Ecidif, main = "Ecidif", ylab = "Valor")
+boxplot(data$Escodif, main = "Escodif", ylab = "Valor")
+boxplot(data$Ciuodif, main = "Ciuodif", ylab = "Valor")
+boxplot(data$Pnadif, main = "Pnadif", ylab = "Valor")
+boxplot(data$Dnadif, main = "Dnadif", ylab = "Valor")
+boxplot(data$Mnadif, main = "Mnadif", ylab = "Valor")
+boxplot(data$Nacdif, main = "Nacdif", ylab = "Valor")
+boxplot(data$Predif, main = "Predif", ylab = "Valor")
+boxplot(data$Dredif, main = "Dredif", ylab = "Valor")
+boxplot(data$Mredif, main = "Mredif", ylab = "Valor")
+boxplot(data$Asist, main = "Asist", ylab = "Valor")
+boxplot(data$Ocur, main = "Ocur", ylab = "Valor")
+boxplot(data$Cerdef, main = "Cerdef", ylab = "Valor")
+
+# Restablecer la disposición de los gráficos
+par(mfrow = c(1, 1))
 ```
+En Mupreg, Mupocu hay distribucion sesgada, por lo que puede indicar valores  altos, por lo que puede haber municipios con mayor registro de defuncion 
+
+En Depreg, Depocu, Mesreg, Mesocu, Diaocu hay distribucion uniforme 
+
+Añoreg, Añoocu hay distribucion concentrada en un solo punto, lo cual confirma que la mayoria de registros de defucion se han hecho en 2022
+
+Edadif, confirmando la mayor concentracion en las edades avanzadas. 
+
+Perdif, muestra distribucion sesgada a la derecha la cual indica que el registro se hace poco despues de la difuncion 
+
+Ecidif, muestra disftribucion sesgada la mayoria de los valores concentrados en el exteremo inferior del rango, por lo que la mayoria de difunciones ocurre en personas con un estado civil especifico.
+
 
 # **5. Exploración de Variables Categóricas**
 ```{r}
@@ -153,6 +241,10 @@ for (var in categorical_vars) {
 }
 ```
 
+Depreg, muestra que la frecuencia de registro de difuncion por departamento es 1, 9,12, 13, 14 y 16. Las mas bajas son 2, 15, 19, 21
+Sexo muestra, que hay mas difunciones por el genero 1 
+Caudef, que son las causas de muerte, las frecuencias mas altas son I249, I64x, k768
+
 # **6. Relaciones entre Variables**
 ## **Análisis de Correlación**
 ```{r}
@@ -165,5 +257,6 @@ corrplot(cor_matrix, method = "color", type = "upper", tl.cex = 0.8,
          title = "Matriz de Correlación de Variables Numéricas", mar=c(0,0,1,0))
 
 ```
-
+Hay correlacion entre año de registro y de ocurrecia, pues son estrechamente relacionadas.
+Dnadif, Mnadif, Nacdif, Predif, Dredif, Mredif, tienen relacion fuerte 
 
