@@ -19,14 +19,16 @@ library(tidyr)
 library(ggplot2)
 library(readxl)
 library(corrplot)
-library(haven)  # Para leer archivos .sav
+library(haven)
 ```
 
 # Cargar Datos
 ```{r}
-if (!requireNamespace("haven", quietly = TRUE)) install.packages("haven")
-library(haven)
-data <- read_sav("mortalidad.sav")  # Cargar archivo
+# Cargar el archivo CSV en lugar de SAV
+data <- read.csv("mortalidad.csv") 
+
+# Ver las primeras filas para entender la estructura
+head(data)
 ```
 
 # **1. Descripción General del Conjunto de Datos**
@@ -36,24 +38,43 @@ summary(data)
 
 # **2. Significado y Tipo de Variables**
 ```{r}
-variables <- c("Anio", "departamento", "externas", "transito", "violencia", "homicidios", 
-               "peso", "diarrea", "mortalidad", "diabetes", "circulatorio", "respiratorio")
 
-descripcion <- c("Año", "Departamento", "Tasa de mortalidad por causas externas por 100,000 habitantes",
-                 "Número de fallecidos en accidentes de tránsito", "Número de denuncias de violencia intrafamiliar",
-                 "Número de homicidios por departamento", "Porcentaje de niños con bajo peso al nacer",
-                 "Tasa de mortalidad por diarrea (A09) por cada 100,000 habitantes",
-                 "Tasa bruta de mortalidad por cada 1,000 habitantes",
-                 "Tasa de mortalidad por diabetes mellitus (E10-E14) por cada 100,000 habitantes",
-                 "Tasa de mortalidad por enfermedades del sistema circulatorio (I00-I99) por 100,000 habitantes",
-                 "Tasa de mortalidad por enfermedades del sistema respiratorio (J00-J99) por cada 10,000 habitantes")
+# Usar variables reales del dataset
+variables <- c("Añoreg", "Depreg", "Perdif", "Ocur", "Cerdef", "Caudef", 
+               "Edadif", "Sexo", "Mesocu", "Diaocu")
 
-tipo <- c("Cualitativa nominal", "Cualitativa nominal", "Cuantitativa discreta", "Cuantitativa discreta",
-          "Cuantitativa discreta", "Cuantitativa discreta", "Cuantitativa continua", "Cuantitativa continua",
-          "Cuantitativa continua", "Cuantitativa continua", "Cuantitativa continua", "Cuantitativa continua")
+# Filtrar solo las variables de interés
+datos_filtrados <- data %>% select(any_of(variables))
 
+# Descripción y tipo de cada variable
+descripcion <- c("Año de registro", 
+                 "Departamento de registro", 
+                 "Periodo de diferencia",
+                 "Ocurrencia del evento", 
+                 "Certificado de defunción", 
+                 "Causa de defunción",
+                 "Edad al fallecer",
+                 "Sexo del fallecido",
+                 "Mes de ocurrencia",
+                 "Día de ocurrencia")
+
+tipo <- c("Cuantitativa discreta", 
+          "Cualitativa nominal", 
+          "Cuantitativa discreta", 
+          "Cualitativa nominal",
+          "Cualitativa nominal", 
+          "Cualitativa nominal", 
+          "Cuantitativa discreta",
+          "Cualitativa nominal",
+          "Cuantitativa discreta",
+          "Cuantitativa discreta")
+
+# Crear tabla con la información de las variables
 tabla_variables <- data.frame(Variable = variables, Descripción = descripcion, Tipo = tipo)
+
+# Imprimir la tabla
 print(tabla_variables)
+
 ```
 
 # **3. Cantidad de Variables y Observaciones**
@@ -76,6 +97,7 @@ summary(numeric_vars)
 get_mode <- function(x) {
   unique_x <- na.omit(unique(x))
   unique_x[which.max(tabulate(match(x, unique_x)))]
+
 }
 
 medidas_tendencia <- data.frame(
@@ -113,7 +135,7 @@ numeric_vars %>%
 
 # **5. Exploración de Variables Categóricas**
 ```{r}
-categorical_vars <- c("departamento")
+categorical_vars <- c("Depreg", "Sexo", "Caudef")
 
 for (var in categorical_vars) {
   cat("\nFrecuencia de", var, ":\n")
