@@ -1,0 +1,143 @@
+---
+title: "Proyecto 3, Avance 1"
+author:
+- 'Micaela Yataz (carnet: 18960)'
+- 'Edman Cota (carnet: 19830)'
+- 'Edwin de Leon (carnet: 22809)'
+date: "2025-03-22"
+output:
+  html_document: default
+  pdf_document: default
+---
+
+<https://github.com/edman-cota/proyecto3MD.git>
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(dplyr)
+library(tidyr)
+library(ggplot2)
+library(readxl)
+library(corrplot)
+library(haven)  # Para leer archivos .sav
+```
+
+# Cargar Datos
+```{r}
+if (!requireNamespace("haven", quietly = TRUE)) install.packages("haven")
+library(haven)
+data <- read_sav("mortalidad.sav")  # Cargar archivo
+```
+
+# **1. Descripción General del Conjunto de Datos**
+```{r}
+summary(data)
+```
+
+# **2. Significado y Tipo de Variables**
+```{r}
+variables <- c("Anio", "departamento", "externas", "transito", "violencia", "homicidios", 
+               "peso", "diarrea", "mortalidad", "diabetes", "circulatorio", "respiratorio")
+
+descripcion <- c("Año", "Departamento", "Tasa de mortalidad por causas externas por 100,000 habitantes",
+                 "Número de fallecidos en accidentes de tránsito", "Número de denuncias de violencia intrafamiliar",
+                 "Número de homicidios por departamento", "Porcentaje de niños con bajo peso al nacer",
+                 "Tasa de mortalidad por diarrea (A09) por cada 100,000 habitantes",
+                 "Tasa bruta de mortalidad por cada 1,000 habitantes",
+                 "Tasa de mortalidad por diabetes mellitus (E10-E14) por cada 100,000 habitantes",
+                 "Tasa de mortalidad por enfermedades del sistema circulatorio (I00-I99) por 100,000 habitantes",
+                 "Tasa de mortalidad por enfermedades del sistema respiratorio (J00-J99) por cada 10,000 habitantes")
+
+tipo <- c("Cualitativa nominal", "Cualitativa nominal", "Cuantitativa discreta", "Cuantitativa discreta",
+          "Cuantitativa discreta", "Cuantitativa discreta", "Cuantitativa continua", "Cuantitativa continua",
+          "Cuantitativa continua", "Cuantitativa continua", "Cuantitativa continua", "Cuantitativa continua")
+
+tabla_variables <- data.frame(Variable = variables, Descripción = descripcion, Tipo = tipo)
+print(tabla_variables)
+```
+
+# **3. Cantidad de Variables y Observaciones**
+```{r}
+num_variables <- ncol(data)
+num_observaciones <- nrow(data)
+cat("Número de variables:", num_variables, "\n")
+cat("Número de observaciones:", num_observaciones, "\n")
+```
+
+# **4. Exploración de Variables Numéricas**
+## **Resumen Estadístico**
+```{r}
+numeric_vars <- data %>% select(where(is.numeric))
+summary(numeric_vars)
+```
+
+## **Medidas de Tendencia Central**
+```{r}
+get_mode <- function(x) {
+  unique_x <- na.omit(unique(x))
+  unique_x[which.max(tabulate(match(x, unique_x)))]
+}
+
+medidas_tendencia <- data.frame(
+  Variable = names(numeric_vars),
+  Media = sapply(numeric_vars, mean, na.rm = TRUE),
+  Mediana = sapply(numeric_vars, median, na.rm = TRUE),
+  Moda = sapply(numeric_vars, get_mode)
+)
+
+print(medidas_tendencia)
+```
+
+## **Distribución de Variables Numéricas**
+### Histogramas
+```{r}
+numeric_vars %>%
+  pivot_longer(cols = everything(), names_to = "Variable", values_to = "Valor") %>%
+  ggplot(aes(x = Valor)) +
+  geom_histogram(binwidth = 10, fill = "steelblue", color = "black", alpha = 0.7) +
+  facet_wrap(~ Variable, scales = "free") +
+  theme_minimal() +
+  labs(title = "Distribución de Variables Numéricas", x = "Valor", y = "Frecuencia")
+```
+
+### Boxplots
+```{r}
+numeric_vars %>%
+  pivot_longer(cols = everything(), names_to = "Variable", values_to = "Valor") %>%
+  ggplot(aes(x = Variable, y = Valor)) +
+  geom_boxplot(fill = "tomato", color = "black", alpha = 0.7) +
+  coord_flip() +
+  theme_minimal() + 
+  labs(title = "Boxplot de Variables Numéricas", x = "Variable", y = "Valor")
+```
+
+# **5. Exploración de Variables Categóricas**
+```{r}
+categorical_vars <- c("departamento")
+
+for (var in categorical_vars) {
+  cat("\nFrecuencia de", var, ":\n")
+  print(table(data[[var]]))
+  
+  ggplot(data, aes_string(x = var)) +
+    geom_bar(fill = "steelblue", color = "black", alpha = 0.7) +
+    theme_minimal() +
+    labs(title = paste("Distribución de", var), x = var, y = "Frecuencia") +
+    theme(axis.text.x = element_text(angle = 45, hjust = 1))
+}
+```
+
+# **6. Relaciones entre Variables**
+## **Análisis de Correlación**
+```{r}
+cor_matrix <- cor(numeric_vars, use = "complete.obs")
+print("Matriz de correlación:")
+print(cor_matrix)
+
+# Visualización de la matriz de correlación
+corrplot(cor_matrix, method = "color", type = "upper", tl.cex = 0.8, 
+         title = "Matriz de Correlación de Variables Numéricas", mar=c(0,0,1,0))
+
+```
+
+
