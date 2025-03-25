@@ -42,34 +42,99 @@ summary(data)
 ```{r}
 
 # Usar variables reales del dataset
-variables <- c("Añoreg", "Depreg", "Perdif", "Ocur", "Cerdef", "Caudef", 
-               "Edadif", "Sexo", "Mesocu", "Diaocu")
+variables <- c(
+  "Departamento de registro",
+  "Municipio de registro",
+  "Mes de registro",
+  "Año de registro",
+  "Departamento de ocurrencia",
+  "Municipio de ocurrencia",
+  "Sexo del difunto(a)",
+  "Día de ocurrencia",
+  "Mes de ocurrencia",
+  "Año ocurrencia",
+  "Edad del difunto(a)",
+  "Periodo de edad del difunto(a)",
+  "Pueblo de pertenencia del difunto(a)",
+  "Estado civil del difunto(a)",
+  "Escolaridad del difunto(a)",
+  "Ocupación (Subgrupos CIUO-08) del difunto(a)",
+  "País de nacimiento del difunto(a)",
+  "Departamento de nacimiento del difunto(a)",
+  "Municipio de nacimiento del difunto(a)",
+  "Nacionalidad del difunto(a)",
+  "País de residencia del difunto(a)",
+  "Departamento de residencia del difunto(a)",
+  "Municipio de residencia del difunto(a)",
+  "Causa de defunción",
+  "Asistencia recibida",
+  "Sitio de ocurrencia",
+  "Quien certifica"
+)
 
 # Filtrar solo las variables de interés
 datos_filtrados <- data %>% select(any_of(variables))
 
 # Descripción y tipo de cada variable
-descripcion <- c("Año de registro", 
-                 "Departamento de registro", 
-                 "Periodo de diferencia",
-                 "Ocurrencia del evento", 
-                 "Certificado de defunción", 
-                 "Causa de defunción",
-                 "Edad al fallecer",
-                 "Sexo del fallecido",
-                 "Mes de ocurrencia",
-                 "Día de ocurrencia")
+descripcion <- c(
+  "Departamento donde se registró el fallecimiento",
+  "Municipio donde se registró el fallecimiento",
+  "Mes en que se registró el fallecimiento",
+  "Año en que se registró el fallecimiento",
+  "Departamento donde ocurrió el fallecimiento",
+  "Municipio donde ocurrió el fallecimiento",
+  "Sexo biológico del fallecido(a)",
+  "Día en que ocurrió el fallecimiento",
+  "Mes en que ocurrió el fallecimiento",
+  "Año en que ocurrió el fallecimiento",
+  "Edad del fallecido(a) en años",
+  "Rango de edad del fallecido(a)",
+  "Pueblo indígena o comunidad a la que pertenecía",
+  "Estado civil del fallecido(a)",
+  "Nivel educativo alcanzado",
+  "Ocupación según la clasificación CIUO-08",
+  "País de nacimiento del fallecido(a)",
+  "Departamento de nacimiento del fallecido(a)",
+  "Municipio de nacimiento del fallecido(a)",
+  "Nacionalidad del fallecido(a)",
+  "País de residencia habitual del fallecido(a)",
+  "Departamento de residencia habitual",
+  "Municipio de residencia habitual",
+  "Causa de la defunción",
+  "Si recibió asistencia médica antes de fallecer",
+  "Lugar donde ocurrió la defunción",
+  "Persona o entidad que certificó la defunción"
+)
 
-tipo <- c("Cuantitativa discreta", 
-          "Cualitativa nominal", 
-          "Cuantitativa discreta", 
-          "Cualitativa nominal",
-          "Cualitativa nominal", 
-          "Cualitativa nominal", 
-          "Cuantitativa discreta",
-          "Cualitativa nominal",
-          "Cuantitativa discreta",
-          "Cuantitativa discreta")
+tipo <- c(
+  "Cualitativa nominal",
+  "Cualitativa nominal",
+  "Cuantitativa discreta",
+  "Cuantitativa discreta",
+  "Cualitativa nominal",
+  "Cualitativa nominal",
+  "Cualitativa nominal",
+  "Cuantitativa discreta",
+  "Cuantitativa discreta",
+  "Cuantitativa discreta",
+  "Cuantitativa discreta",
+  "Cualitativa ordinal",
+  "Cualitativa nominal",
+  "Cualitativa nominal",
+  "Cualitativa ordinal",
+  "Cualitativa nominal",
+  "Cualitativa nominal",
+  "Cualitativa nominal",
+  "Cualitativa nominal",
+  "Cualitativa nominal",
+  "Cualitativa nominal",
+  "Cualitativa nominal",
+  "Cualitativa nominal",
+  "Cualitativa nominal",
+  "Cualitativa nominal",
+  "Cualitativa nominal",
+  "Cualitativa nominal" 
+)
 
 # Crear tabla con la información de las variables
 tabla_variables <- data.frame(Variable = variables, Descripción = descripcion, Tipo = tipo)
