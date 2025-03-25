@@ -32,6 +32,8 @@ head(data)
 ```
 
 # **1. Descripción General del Conjunto de Datos**
+
+El conjunto de datos a evaluar es tomado del instituto nacional de estadistica, INE. Corresponden a los registros de difunciones en Guatemala, contiene informacion de cada fallecimiento, como el año de fallecimiento, causa, entre otros.
 ```{r}
 summary(data)
 ```
@@ -87,6 +89,8 @@ cat("Número de observaciones:", num_observaciones, "\n")
 
 # **4. Exploración de Variables Numéricas**
 ## **Resumen Estadístico**
+
+Se presenta una vision general de las variables numericas del conjunto de datos de defunciones, incluyendo las medidas de tendencia central, dispersion, etc. 
 ```{r}
 numeric_vars <- data %>% select(where(is.numeric))
 summary(numeric_vars)
